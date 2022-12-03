@@ -1,5 +1,5 @@
 export {};
 
-const lines = (await Deno.readTextFile("./example.txt")).split("\r\n");
+const lines = (await Deno.readTextFile("./example.txt")).split("\n");
 
 console.log(lines);

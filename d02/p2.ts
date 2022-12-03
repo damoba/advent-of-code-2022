@@ -1,6 +1,6 @@
 export {};
 
-const rounds = (await Deno.readTextFile("./input.txt")).split("\r\n");
+const rounds = (await Deno.readTextFile("./input.txt")).split("\n");
 
 const pointsPerShape: { [key: string]: number } = { A: 1, B: 2, C: 3 };
 const wins: { [key: string]: string } = { A: "C", B: "A", C: "B" };

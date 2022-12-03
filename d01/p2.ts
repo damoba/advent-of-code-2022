@@ -1,8 +1,8 @@
 export {};
 
 const elves = (await Deno.readTextFile("./input.txt"))
-  .split("\r\n\r\n")
-  .map((listStr) => listStr.split("\r\n").map((itemCalsStr) => parseInt(itemCalsStr, 10)));
+  .split("\n\n")
+  .map((listStr) => listStr.split("\n").map((itemCalsStr) => parseInt(itemCalsStr, 10)));
 
 const maxCalsPerElf: number[] = [];
 
