@@ -10,4 +10,4 @@ elves.forEach((list) => {
   maxCalsPerElf.push(list.reduce((itemCals, c) => itemCals + c, 0));
 });
 
-console.log("top 3 max", maxCalsPerElf.sort((a, b) => b - a).slice(0,3).reduce((maxCals, a) => maxCals + a, 0));
+console.log("top 3 max", maxCalsPerElf.sort((a, b) => b - a).slice(0,3).reduce((maxCals, c) => maxCals + c, 0));
