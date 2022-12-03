@@ -13,28 +13,20 @@ const winPoints = 6;
 let totalPoints = 0;
 
 for (const round of rounds) {
-  let draw = false;
-  let win = false;
-  let myShape = "";
-
   const shapes = round.split(" ");
+  let myShape = "";
+  
   if (shapes[1] === drawShape) {
-    draw = true;
+    totalPoints += drawPoints;
     myShape = shapes[0];
   } else if (shapes[1] === winShape) {
-    win = true;
+    totalPoints += winPoints;
     myShape = loses[shapes[0]];
   } else {
     myShape = wins[shapes[0]];
   }
 
   totalPoints += pointsPerShape[myShape];
-
-  if (draw) {
-    totalPoints += drawPoints;
-  } else if (win) {
-    totalPoints += winPoints;
-  }
 }
 
 console.log("total score", totalPoints);
