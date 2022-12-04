@@ -1,5 +1,5 @@
 # Advent of Code 2022
-My solutions to these problems: https://adventofcode.com/2022
+My solutions to the following problems: https://adventofcode.com/2022
 ## Coded in TypeScript on a Deno environment
 To run:
 - Install Deno.
