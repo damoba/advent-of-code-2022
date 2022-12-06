@@ -1,0 +1,28 @@
+import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
+import { parseSolution, parseStacks } from "./utils.ts";
+
+const solve = (data: string) => {
+  const [stacksStr, instructions] = data.split("\n\n");
+  const stacks = parseStacks(stacksStr);
+
+  instructions.split("\n").forEach((line) => {
+    const [_, amount, __, from, ___, to] = line.split(" ");
+    stacks[parseInt(to) - 1].push(
+      ...stacks[parseInt(from) - 1].slice(
+        stacks[parseInt(from) - 1].length - parseInt(amount)
+      )
+    );
+    for (let i = 0; i < parseInt(amount); i++) {
+      stacks[parseInt(from) - 1].pop();
+    }
+  });
+
+  return parseSolution(stacks);
+};
+
+const example = await Deno.readTextFile("./example.txt");
+const input = await Deno.readTextFile("./input.txt");
+Deno.test("Test and Solve", () => {
+  assertEquals(solve(example), "MCD");
+  console.log("SOLUTION", solve(input));
+});
