@@ -2,18 +2,17 @@ import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 import { TreeNode, parseFS } from "./utils.ts";
 
 const maxSize = 100000;
-let totalSizeSum = 0;
 
-const calculateTotalSizesSum = (node: TreeNode) => {
+const calcTotalSizesSum = (node: TreeNode, totalSizesSum: { sum: number }) => {
   if (node.isFolder()) {
     let size = 0;
     node.getChildren().forEach((child) => {
-      size += calculateTotalSizesSum(child);
+      size += calcTotalSizesSum(child, totalSizesSum);
     });
     node.setSize(size);
 
     if (size <= maxSize) {
-      totalSizeSum += size;
+      totalSizesSum.sum += size;
     }
     return size;
   } else {
@@ -22,10 +21,9 @@ const calculateTotalSizesSum = (node: TreeNode) => {
 };
 
 const solve = (data: string) => {
-  calculateTotalSizesSum(parseFS(data));
-  const result = totalSizeSum;
-  totalSizeSum = 0;
-  return result;
+  const totalSizesSum = { sum: 0 };
+  calcTotalSizesSum(parseFS(data), totalSizesSum);
+  return totalSizesSum.sum;
 };
 
 const example = await Deno.readTextFile("./example.txt");

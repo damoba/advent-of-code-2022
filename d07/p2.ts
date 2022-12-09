@@ -2,16 +2,15 @@ import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 import { TreeNode, parseFS } from "./utils.ts";
 
 const idealSize = 40000000;
-let folderSizes: number[] = [];
 
-const calculateTotalSizes = (node: TreeNode) => {
+const calcTotalSizes = (node: TreeNode, folderSizes: { sizes: number[] }) => {
   if (node.isFolder()) {
     let size = 0;
     node.getChildren().forEach((child) => {
-      size += calculateTotalSizes(child);
+      size += calcTotalSizes(child, folderSizes);
     });
     node.setSize(size);
-    folderSizes.push(size);
+    folderSizes.sizes.push(size);
     return size;
   } else {
     return node.getSize()!;
@@ -19,16 +18,15 @@ const calculateTotalSizes = (node: TreeNode) => {
 };
 
 const solve = (data: string) => {
-  const totalSize = calculateTotalSizes(parseFS(data));
+  const folderSizes = { sizes: [] };
+  const totalSize = calcTotalSizes(parseFS(data), folderSizes);
   const spaceToFree = totalSize - idealSize;
-  folderSizes.sort((a, b) => a - b);
+  folderSizes.sizes.sort((a, b) => a - b);
   let i = 0;
-  while (folderSizes[i] < spaceToFree) {
+  while (folderSizes.sizes[i] < spaceToFree) {
     i++;
   }
-  const result = folderSizes[i];
-  folderSizes = [];
-  return result;
+  return folderSizes.sizes[i];
 };
 
 const example = await Deno.readTextFile("./example.txt");
