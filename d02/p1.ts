@@ -1,10 +1,10 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
-const pointsPerShape: { [key: string]: number } = { X: 1, Y: 2, Z: 3 };
-const draws = ["A X", "B Y", "C Z"];
-const wins = ["C X", "A Y", "B Z"];
-const drawPoints = 3;
-const winPoints = 6;
+const POINTS_PER_SHAPE: { [key: string]: number } = { X: 1, Y: 2, Z: 3 };
+const DRAWS = ["A X", "B Y", "C Z"];
+const WINS = ["C X", "A Y", "B Z"];
+const DRAW_POINTS = 3;
+const WIN_POINTS = 6;
 
 const solve = (data: string) => {
   const rounds = data.split("\n");
@@ -12,12 +12,12 @@ const solve = (data: string) => {
 
   for (const round of rounds) {
     const shapes = round.split(" ");
-    totalPoints += pointsPerShape[shapes[1]];
+    totalPoints += POINTS_PER_SHAPE[shapes[1]];
 
-    if (draws.includes(round)) {
-      totalPoints += drawPoints;
-    } else if (wins.includes(round)) {
-      totalPoints += winPoints;
+    if (DRAWS.includes(round)) {
+      totalPoints += DRAW_POINTS;
+    } else if (WINS.includes(round)) {
+      totalPoints += WIN_POINTS;
     }
   }
 
@@ -28,5 +28,8 @@ const example = await Deno.readTextFile("./example.txt");
 const input = await Deno.readTextFile("./input.txt");
 Deno.test("Test and Solve", () => {
   assertEquals(solve(example), 15);
+  const t0 = performance.now();
   console.log("SOLUTION", solve(input));
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });

@@ -153,8 +153,9 @@ const calcPressure = (
           ),
           maxFreq
         );
+      } else {
+        maxFreq = Math.max(maxFreq, currStats!.totalFreq);
       }
-      maxFreq = Math.max(maxFreq, currStats!.totalFreq);
     }
   }
   return maxFreq;

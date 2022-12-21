@@ -25,5 +25,8 @@ const example = await Deno.readTextFile("./example.txt");
 const input = await Deno.readTextFile("./input.txt");
 Deno.test("Test and Solve", () => {
   assertEquals(solve(example), 2);
+  const t0 = performance.now();
   console.log("SOLUTION", solve(input));
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });

@@ -72,5 +72,8 @@ Deno.test("Test and Solve", () => {
   assertEquals(solve(example3), 6);
   assertEquals(solve(example4), 10);
   assertEquals(solve(example5), 11);
+  const t0 = performance.now();
   console.log("SOLUTION", solve(input));
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });

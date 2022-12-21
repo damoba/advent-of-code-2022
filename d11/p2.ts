@@ -1,8 +1,8 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 import { Monkey, parseMonkeys } from "./utils.ts";
 
-const multiply = "*";
-const itself = "old";
+const MULTIPLY = "*";
+const ITSELF = "old";
 
 const solve = (data: string) => {
   const monkeys: Monkey[] = [];
@@ -13,14 +13,14 @@ const solve = (data: string) => {
     for (const monkey of monkeys) {
       while (monkey.items.length > 0) {
         monkey.count++;
-        if (monkey.oper[0] === multiply) {
-          if (monkey.oper[1] === itself) {
+        if (monkey.oper[0] === MULTIPLY) {
+          if (monkey.oper[1] === ITSELF) {
             monkey.items[0] *= monkey.items[0];
           } else {
             monkey.items[0] *= monkey.oper[1] as number;
           }
         } else {
-          if (monkey.oper[1] === itself) {
+          if (monkey.oper[1] === ITSELF) {
             monkey.items[0] += monkey.items[0];
           } else {
             monkey.items[0] += monkey.oper[1] as number;
@@ -48,5 +48,8 @@ const example = await Deno.readTextFile("./example.txt");
 const input = await Deno.readTextFile("./input.txt");
 Deno.test("Test and Solve", () => {
   assertEquals(solve(example), 2713310158);
+  const t0 = performance.now();
   console.log("SOLUTION", solve(input));
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });

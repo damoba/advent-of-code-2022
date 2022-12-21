@@ -2,14 +2,14 @@ import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
 type Knot = { r: number; c: number; str: string };
 
-const moveUpLeft = "UL";
-const moveUp = "U";
-const moveUpRight = "UR";
-const moveLeft = "L";
-const moveRight = "R";
-const moveDownLeft = "DL";
-const moveDown = "D";
-const moveDownRight = "DR";
+const MOVE_UP_LEFT = "UL";
+const MOVE_UP = "U";
+const MOVE_UP_RIGHT = "UR";
+const MOVE_LEFT = "L";
+const MOVE_RIGHT = "R";
+const MOVE_DOWN_LEFT = "DL";
+const MOVE_DOWN = "D";
+const MOVE_DOWN_RIGHT = "DR";
 
 const calcMaxLen = (lines: string[]) => {
   return lines.reduce((acc, line) => {
@@ -37,7 +37,7 @@ const move = (
   const [dir, dist]: [string, number] = parseMotion(motion) as [string, number];
 
   switch (dir) {
-    case moveUpLeft:
+    case MOVE_UP_LEFT:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.r--;
@@ -58,7 +58,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUpLeft} 1`
+              `${MOVE_UP_LEFT} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -69,7 +69,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUp} 1`
+              `${MOVE_UP} 1`
             );
           } else if (
             tailsPos[tailIdx].r < pHeadPos.r &&
@@ -80,7 +80,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveLeft} 1`
+              `${MOVE_LEFT} 1`
             );
           }
         } else {
@@ -88,7 +88,7 @@ const move = (
         }
       }
       break;
-    case moveUp:
+    case MOVE_UP:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.r--;
@@ -104,7 +104,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUpRight} 1`
+              `${MOVE_UP_RIGHT} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -115,7 +115,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUp} 1`
+              `${MOVE_UP} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -126,7 +126,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUpLeft} 1`
+              `${MOVE_UP_LEFT} 1`
             );
           }
         } else {
@@ -134,7 +134,7 @@ const move = (
         }
       }
       break;
-    case moveUpRight:
+    case MOVE_UP_RIGHT:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.r--;
@@ -155,7 +155,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUpRight} 1`
+              `${MOVE_UP_RIGHT} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -166,7 +166,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUp} 1`
+              `${MOVE_UP} 1`
             );
           } else if (
             tailsPos[tailIdx].r < pHeadPos.r &&
@@ -177,7 +177,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveRight} 1`
+              `${MOVE_RIGHT} 1`
             );
           }
         } else {
@@ -185,7 +185,7 @@ const move = (
         }
       }
       break;
-    case moveLeft:
+    case MOVE_LEFT:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.c--;
@@ -201,7 +201,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDownLeft} 1`
+              `${MOVE_DOWN_LEFT} 1`
             );
           } else if (
             tailsPos[tailIdx].r === pHeadPos.r &&
@@ -212,7 +212,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveLeft} 1`
+              `${MOVE_LEFT} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -223,7 +223,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUpLeft} 1`
+              `${MOVE_UP_LEFT} 1`
             );
           }
         } else {
@@ -231,7 +231,7 @@ const move = (
         }
       }
       break;
-    case moveRight:
+    case MOVE_RIGHT:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.c++;
@@ -247,7 +247,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDownRight} 1`
+              `${MOVE_DOWN_RIGHT} 1`
             );
           } else if (
             tailsPos[tailIdx].r === pHeadPos.r &&
@@ -258,7 +258,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveRight} 1`
+              `${MOVE_RIGHT} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -269,7 +269,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveUpRight} 1`
+              `${MOVE_UP_RIGHT} 1`
             );
           }
         } else {
@@ -277,7 +277,7 @@ const move = (
         }
       }
       break;
-    case moveDownLeft:
+    case MOVE_DOWN_LEFT:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.r++;
@@ -298,7 +298,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDownLeft} 1`
+              `${MOVE_DOWN_LEFT} 1`
             );
           } else if (
             tailsPos[tailIdx].r < pHeadPos.r &&
@@ -309,7 +309,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDown} 1`
+              `${MOVE_DOWN} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -320,7 +320,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveLeft} 1`
+              `${MOVE_LEFT} 1`
             );
           }
         } else {
@@ -328,7 +328,7 @@ const move = (
         }
       }
       break;
-    case moveDown:
+    case MOVE_DOWN:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.r++;
@@ -344,7 +344,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDownRight} 1`
+              `${MOVE_DOWN_RIGHT} 1`
             );
           } else if (
             tailsPos[tailIdx].r < pHeadPos.r &&
@@ -355,7 +355,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDown} 1`
+              `${MOVE_DOWN} 1`
             );
           } else if (
             tailsPos[tailIdx].r < pHeadPos.r &&
@@ -366,7 +366,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDownLeft} 1`
+              `${MOVE_DOWN_LEFT} 1`
             );
           }
         } else {
@@ -374,7 +374,7 @@ const move = (
         }
       }
       break;
-    case moveDownRight:
+    case MOVE_DOWN_RIGHT:
       for (let i = 0; i < dist; i++) {
         const pHeadPos = { ...headPos };
         headPos.r++;
@@ -395,7 +395,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDownRight} 1`
+              `${MOVE_DOWN_RIGHT} 1`
             );
           } else if (
             tailsPos[tailIdx].r < pHeadPos.r &&
@@ -406,7 +406,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveDown} 1`
+              `${MOVE_DOWN} 1`
             );
           } else if (
             tailsPos[tailIdx].r > pHeadPos.r &&
@@ -417,7 +417,7 @@ const move = (
               tailsPos[tailIdx],
               tailsPos,
               tailIdx + 1,
-              `${moveRight} 1`
+              `${MOVE_RIGHT} 1`
             );
           }
         } else {
@@ -457,5 +457,8 @@ const example = await Deno.readTextFile("./example_p2.txt");
 const input = await Deno.readTextFile("./input.txt");
 Deno.test("Test and Solve", () => {
   assertEquals(solve(example), 36);
+  const t0 = performance.now();
   console.log("SOLUTION", solve(input));
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });

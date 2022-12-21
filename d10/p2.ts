@@ -22,5 +22,8 @@ Deno.test("Test and Solve", () => {
   console.log("Example:");
   solve(example);
   console.log("\nInput:");
+  const t0 = performance.now();
   solve(input);
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });

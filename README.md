@@ -7,5 +7,5 @@ To run:
 - Navigate to a particular day's folder on your terminal.
 - To run a specific part's solution (e.g. p1.ts) and watch for any file changes:
 ```
-deno test --allow-read --watch p1.ts
+deno test --allow-read --watch --allow-hrtime p1.ts
 ```

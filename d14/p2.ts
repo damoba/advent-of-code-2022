@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
-type coordinate = { r: number; c: number };
-type status = { addSand: boolean };
+type Coordinate = { r: number; c: number };
+type Status = { addSand: boolean };
 
 const parseScan = (data: string) => {
   let minC = 500;
@@ -79,9 +79,9 @@ const parseScan = (data: string) => {
 
 const fall = (
   grid: string[][],
-  source: coordinate,
-  unit: coordinate,
-  status: status
+  source: Coordinate,
+  unit: Coordinate,
+  status: Status
 ) => {
   while (unit.r < grid.length && grid[unit.r][unit.c] === ".") {
     unit.r += 1;
@@ -135,10 +135,10 @@ const fall = (
 const solve = (data: string) => {
   const dataParsed = parseScan(data);
   const grid: string[][] = dataParsed[0] as string[][];
-  const source: coordinate = dataParsed[1] as coordinate;
+  const source: Coordinate = dataParsed[1] as Coordinate;
   source.r += 1; // start falling
 
-  const status: status = { addSand: true };
+  const status: Status = { addSand: true };
   let count = 0;
   while (grid[source.r - 1][source.c] !== "o") {
     status.addSand = true;
@@ -155,5 +155,8 @@ const example = await Deno.readTextFile("./example.txt");
 const input = await Deno.readTextFile("./input.txt");
 Deno.test("Test and Solve", () => {
   assertEquals(solve(example), 93);
+  const t0 = performance.now();
   console.log("SOLUTION", solve(input));
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });

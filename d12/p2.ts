@@ -8,8 +8,8 @@ type Spot = {
   steps: number;
 };
 
-const start = "S";
-const end = "E";
+const START = "S";
+const END = "E";
 
 const checkNeighbourIsValidAndAdd = (
   spots: Spot,
@@ -65,7 +65,7 @@ const traverseGraph = (graph: Spot[][], source: Spot | undefined) => {
   while (openSpots.length !== 0) {
     const current = openSpots.shift();
 
-    if (current!.val === end) {
+    if (current!.val === END) {
       return current;
     }
 
@@ -91,10 +91,10 @@ const solve = (data: string) => {
         height: spotChar,
         steps: 0,
       };
-      if (spotChar === start || spotChar === "a") {
+      if (spotChar === START || spotChar === "a") {
         startSpots.push(spot);
         spot.height = "a";
-      } else if (spotChar === end) {
+      } else if (spotChar === END) {
         spot.height = "z";
         endSpot = spot;
       }
@@ -119,5 +119,8 @@ const example = await Deno.readTextFile("./example.txt");
 const input = await Deno.readTextFile("./input.txt");
 Deno.test("Test and Solve", () => {
   assertEquals(solve(example), 29);
+  const t0 = performance.now();
   console.log("SOLUTION", solve(input));
+  const t1 = performance.now();
+  console.log("TIME", (t1 - t0).toLocaleString(), "ms");
 });
