@@ -106,13 +106,14 @@ const createRockRights = (rock: Rock, rockHeight: number) => {
 const createRockBottoms = (
   rock: Rock,
   rockHeight: number,
-  rockLefts: number[][],
+  rockLefts: number[][]
 ) => {
   const rockBottoms = [];
   for (let i = 0; i < rock.width; i++) {
-    const posCol = rock.bases === 2
-      ? rockLefts[rock.height - 1][1] - 1 + i
-      : rockLefts[rock.height - 1][1] + i;
+    const posCol =
+      rock.bases === 2
+        ? rockLefts[rock.height - 1][1] - 1 + i
+        : rockLefts[rock.height - 1][1] + i;
 
     if (rock.shape[rock.height - rock.bases][i] === "#") {
       if (rock.bases === 2 && (i === 0 || i === 2)) {
@@ -128,15 +129,16 @@ const createRockBottoms = (
 const createRockTops = (
   rock: Rock,
   rockHeight: number,
-  rockLefts: number[][],
+  rockLefts: number[][]
 ) => {
   const rockTops = [];
   for (let i = 0; i < rock.width; i++) {
-    const posCol = rock.bases === 2
-      ? rockLefts[0][1] - 1 + i
-      : rock.tops === 3
-      ? rockLefts[0][1] - 2 + i
-      : rockLefts[0][1] + i;
+    const posCol =
+      rock.bases === 2
+        ? rockLefts[0][1] - 1 + i
+        : rock.tops === 3
+        ? rockLefts[0][1] - 2 + i
+        : rockLefts[0][1] + i;
     if (rock.shape[rock.height - rock.bases][i] === "#") {
       if (rock.bases === 2 && (i === 0 || i === 2)) {
         rockTops.push([rockHeight - rock.height + 2, posCol]);
@@ -241,11 +243,12 @@ const solve = (data: string) => {
         rockBottoms = rockBottoms.map(([row, col]) => [row + 1, col]);
         rockTops = rockTops.map(([row, col]) => [row + 1, col]);
       } else {
-        const topLeftCorner = rockCurrent.bases === 2
-          ? [rockTops[0][0] - 1, rockTops[0][1]]
-          : rockCurrent.tops === 3
-          ? [rockTops[0][0] - 2, rockTops[0][1]]
-          : [rockTops[0][0], rockTops[0][1]];
+        const topLeftCorner =
+          rockCurrent.bases === 2
+            ? [rockTops[0][0] - 1, rockTops[0][1]]
+            : rockCurrent.tops === 3
+            ? [rockTops[0][0] - 2, rockTops[0][1]]
+            : [rockTops[0][0], rockTops[0][1]];
         for (let i = 0; i < rockCurrent.height; i++) {
           for (let j = 0; j < rockCurrent.width; j++) {
             if (rockCurrent.shape[i][j] === "#") {
@@ -257,7 +260,7 @@ const solve = (data: string) => {
         const prevMaxHeight = maxHeight;
         maxHeight = Math.max(
           maxHeight,
-          ...rockTops.map(([row]) => chamber.length - row),
+          ...rockTops.map(([row]) => chamber.length - row)
         );
         if (maxHeight > prevMaxHeight) {
           for (let i = 0; i < maxHeight - prevMaxHeight; i++) {
@@ -274,7 +277,7 @@ const solve = (data: string) => {
         const rockStatus = calcRockStatus(
           jetIdx,
           rockCount % ROCKS.length,
-          floor,
+          floor
         );
 
         if (rockStats.has(rockStatus)) {
@@ -322,8 +325,8 @@ const solve = (data: string) => {
             break;
           }
         }
-        maxHeight += extraRockStats!.maxHeight - firstRock.maxHeight -
-          firstRockInLoopDiff;
+        maxHeight +=
+          extraRockStats!.maxHeight - firstRock.maxHeight - firstRockInLoopDiff;
       }
 
       const maxHeightDiff = nextLoopFirstRock.maxHeight - firstRock.maxHeight;
