@@ -7,7 +7,7 @@ import {
 set_precision(-20);
 
 type MonkeyCalc = { operand1: string; operand2: string; operator: string };
-type Point = { x: string; y: string };
+type Point = { x: BigFloat; y: BigFloat };
 
 const PLUS = "+";
 const MINUS = "-";
@@ -19,7 +19,7 @@ const YOUR_NAME = "humn";
 const parseMonkeys = (
   data: string,
   monkeys: Map<string, MonkeyCalc>,
-  cachedMonkeys: Map<string, string>
+  cachedMonkeys: Map<string, BigFloat>
 ) => {
   data.split("\n").forEach((line) => {
     if (line) {
@@ -27,7 +27,7 @@ const parseMonkeys = (
       calc = calc.trim();
 
       if (/^\d+$/.test(calc)) {
-        cachedMonkeys.set(name, calc);
+        cachedMonkeys.set(name, new BigFloat(calc));
       } else {
         let [operand1, operator, operand2] = calc.split(" ");
         // ----> Main change here: <----
@@ -41,7 +41,7 @@ const parseMonkeys = (
 const getMonkeyNum = (
   name: string,
   monkeys: Map<string, MonkeyCalc>,
-  cachedMonkeys: Map<string, string>
+  cachedMonkeys: Map<string, BigFloat>
 ) => {
   if (cachedMonkeys.has(name)) {
     return cachedMonkeys.get(name);
@@ -51,19 +51,19 @@ const getMonkeyNum = (
     const operand2 = getMonkeyNum(monkey.operand2, monkeys, cachedMonkeys)!;
     const operator = monkey.operator;
 
-    let result = "";
+    let result = new BigFloat("0");
     switch (operator) {
       case PLUS:
-        result = new BigFloat(operand1).add(operand2).toString();
+        result = new BigFloat(operand1).add(operand2);
         break;
       case MINUS:
-        result = new BigFloat(operand1).sub(operand2).toString();
+        result = new BigFloat(operand1).sub(operand2);
         break;
       case DIV:
-        result = new BigFloat(operand1).div(operand2).toString();
+        result = new BigFloat(operand1).div(operand2);
         break;
       case MULT:
-        result = new BigFloat(operand1).mul(operand2).toString();
+        result = new BigFloat(operand1).mul(operand2);
         break;
     }
 
@@ -74,7 +74,7 @@ const getMonkeyNum = (
 
 const solve = (data: string) => {
   const monkeys = new Map<string, MonkeyCalc>();
-  const cachedMonkeys = new Map<string, string>();
+  const cachedMonkeys = new Map<string, BigFloat>();
   parseMonkeys(data, monkeys, cachedMonkeys);
 
   // y = mx + b
@@ -88,21 +88,22 @@ const solve = (data: string) => {
   const points: Point[] = [];
   let x = 0;
   while (x < 2) {
-    const xStr = x.toString();
+    const xBigFloat = new BigFloat(x.toString());
     const monkeysTest = new Map(monkeys);
     const cachedMonkeysTest = new Map(cachedMonkeys);
-    cachedMonkeysTest.set(YOUR_NAME, xStr);
+    cachedMonkeysTest.set(YOUR_NAME, xBigFloat);
     const y = getMonkeyNum(MONKEY_NAME, monkeysTest, cachedMonkeysTest)!;
-    points.push({ x: xStr, y });
+    points.push({ x: xBigFloat, y });
     x++;
   }
 
-  const m = new BigFloat(new BigFloat(points[1].y).sub(points[0].y).toString())
-    .div(new BigFloat(points[1].x).sub(points[0].x).toString())
-    .toString();
+  const m = new BigFloat(new BigFloat(points[1].y).sub(points[0].y)).div(
+    new BigFloat(points[1].x).sub(points[0].x)
+  );
   const b = points[0].y;
   return new BigFloat("-1")
-    .mul(new BigFloat(new BigFloat(b).div(m).toString()).toString())
+    .mul(new BigFloat(new BigFloat(b).div(m)))
+    .floor()
     .toString();
 };
 
