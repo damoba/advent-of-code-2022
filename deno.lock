@@ -4,6 +4,15 @@
     "https://deno.land/std@0.167.0/fmt/colors.ts": "03ad95e543d2808bc43c17a3dd29d25b43d0f16287fe562a0be89bf632454a12",
     "https://deno.land/std@0.167.0/testing/_diff.ts": "a23e7fc2b4d8daa3e158fa06856bedf5334ce2a2831e8bf9e509717f455adb2c",
     "https://deno.land/std@0.167.0/testing/_format.ts": "cd11136e1797791045e639e9f0f4640d5b4166148796cad37e6ef75f7d7f3832",
-    "https://deno.land/std@0.167.0/testing/asserts.ts": "51353e79437361d4b02d8e32f3fc83b22231bc8f8d4c841d86fd32b0b0afe940"
+    "https://deno.land/std@0.167.0/testing/asserts.ts": "51353e79437361d4b02d8e32f3fc83b22231bc8f8d4c841d86fd32b0b0afe940",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/arithmetic.ts": "97e577618b6ea31c5165417ab745355c5f311f5f00a81107a8e69df30c8b53d9",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/bigfloat.ts": "ee091250a740f4dc4613c4e216a27f11052a16755dc7bbded96755e525608f4d",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/constants.ts": "3d779960f8c43e7a1ee89dbbce535ab15e1d60282bda44723b09bad87e84da2d",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/constructors.ts": "84a8decefd65ea762962d9aae6f3f5db299cd81912fb03b99363311e3920ef79",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/interpreter.ts": "258ef44f3748b9103858f0d2a454f74d9e19411261b2a8656aa19325bbacece2",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/predicates.ts": "02da050040e096f44bb1cacee1801d40866bb028972058f82c63fe45cae13834",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/relational.ts": "a1da7e7ce9fd6fb060129f97a2084c0bb672b55814167a1e07e7e583f2afe527",
+    "https://deno.land/x/bigfloat@v3.0.2/lib/types.ts": "5ef51bffc6ed601b3233b64f26f7adf0a208cf46a195df7155419f8ab9edaea1",
+    "https://deno.land/x/bigfloat@v3.0.2/mod.ts": "580180c73405dfe7bcc5cb8067c60c592b3ec58ed5239287e34bc9a57d9d5be4"
   }
 }
