@@ -147,7 +147,7 @@ const performRound = (
   elves.vals = newElves;
 };
 
-const findGroundTiles = (map: string[][]) => {
+const calcGroundTiles = (map: string[][], numElves: number) => {
   let minRow = map.length;
   let maxRow = 0;
   let minCol = map[0].length;
@@ -164,15 +164,7 @@ const findGroundTiles = (map: string[][]) => {
     });
   });
 
-  let groundTiles = 0;
-  for (let r = minRow; r <= maxRow; r++) {
-    for (let c = minCol; c <= maxCol; c++) {
-      if (map[r][c] === GROUND) {
-        groundTiles++;
-      }
-    }
-  }
-  return groundTiles;
+  return (maxRow - minRow + 1) * (maxCol - minCol + 1) - numElves;
 };
 
 const solve = (data: string) => {
@@ -184,7 +176,7 @@ const solve = (data: string) => {
     performRound(map, elves, round % PROPOSAL_ORDER.length);
   }
 
-  return findGroundTiles(map);
+  return calcGroundTiles(map, elves.vals.length);
 };
 
 const example = await Deno.readTextFile("./example.txt");
