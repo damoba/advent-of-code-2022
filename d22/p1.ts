@@ -1,6 +1,10 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
-const FACINGS = ["Right", "Down", "Left", "Up"] as const;
+const RIGHT = "Right";
+const DOWN = "Down";
+const LEFT = "Left";
+const UP = "Up";
+const FACINGS = [RIGHT, DOWN, LEFT, UP] as const;
 type Facing = typeof FACINGS[number];
 
 const ROTATIONS = { L: -1, R: 1 } as const;
@@ -50,7 +54,7 @@ const teleport = (
   pos: { row: number; col: number },
   facing: { val: Facing }
 ) => {
-  if (facing.val == "Up") {
+  if (facing.val == UP) {
     let nextRow = map.length - 1;
     while (map[nextRow][pos.col] === EDGE) {
       nextRow--;
@@ -61,7 +65,7 @@ const teleport = (
       pos.row = nextRow;
       return false;
     }
-  } else if (facing.val == "Right") {
+  } else if (facing.val == RIGHT) {
     let nextCol = 0;
     while (map[pos.row][nextCol] === EDGE) {
       nextCol++;
@@ -72,7 +76,7 @@ const teleport = (
       pos.col = nextCol;
       return false;
     }
-  } else if (facing.val == "Down") {
+  } else if (facing.val == DOWN) {
     let nextRow = 0;
     while (map[nextRow][pos.col] === EDGE) {
       nextRow++;
@@ -83,7 +87,7 @@ const teleport = (
       pos.row = nextRow;
       return false;
     }
-  } else if (facing.val == "Left") {
+  } else if (facing.val == LEFT) {
     let nextCol = map[pos.row].length - 1;
     while (map[pos.row][nextCol] === EDGE) {
       nextCol--;
@@ -103,7 +107,7 @@ const move = (
   facing: { val: Facing }
 ) => {
   switch (facing.val) {
-    case "Up":
+    case UP:
       if (pos.row === 0 || map[pos.row - 1][pos.col] === EDGE) {
         const metWall = teleport(map, pos, facing);
         return metWall;
@@ -116,7 +120,7 @@ const move = (
         return false;
       }
       break;
-    case "Right":
+    case RIGHT:
       if (
         pos.col === map[pos.row].length - 1 ||
         map[pos.row][pos.col + 1] === EDGE
@@ -132,7 +136,7 @@ const move = (
         return false;
       }
       break;
-    case "Down":
+    case DOWN:
       if (pos.row === map.length - 1 || map[pos.row + 1][pos.col] === EDGE) {
         const metWall = teleport(map, pos, facing);
         return metWall;
@@ -145,7 +149,7 @@ const move = (
         return false;
       }
       break;
-    case "Left":
+    case LEFT:
       if (pos.col === 0 || map[pos.row][pos.col - 1] === EDGE) {
         const metWall = teleport(map, pos, facing);
         return metWall;
@@ -191,7 +195,7 @@ const solve = (data: string) => {
   const [map, path] = parseMap(data);
 
   const pos = { row: 0, col: map[0].indexOf(TILE) };
-  const facing: { val: Facing } = { val: "Right" };
+  const facing: { val: Facing } = { val: RIGHT };
   traverseMap(map, path, pos, facing);
 
   pos.row++;

@@ -3,6 +3,11 @@ import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 type Coordinate = { r: number; c: number };
 type Status = { addSand: boolean };
 
+const ROCK = "#";
+const AIR = ".";
+const SRC = "+";
+const SAND = "o";
+
 const parseScan = (data: string) => {
   let minC = 500;
   let maxC = 500;
@@ -42,32 +47,32 @@ const parseScan = (data: string) => {
 
   const grid = new Array(maxR - minR + 3)
     .fill(0)
-    .map(() => Array(maxC - minC + 1).fill("."));
+    .map(() => Array(maxC - minC + 1).fill(AIR));
 
-  grid[0][500 - minC] = "+";
+  grid[0][500 - minC] = SRC;
   for (let j = 0; j < grid[0].length; j++) {
-    grid[grid.length - 1][j] = "#";
+    grid[grid.length - 1][j] = ROCK;
   }
   lines.forEach((line) => {
     for (let i = 1; i < line.length; i++) {
       if (line[i][1] === line[i - 1][1]) {
         if (line[i][0] - line[i - 1][0] > 0) {
           for (let j = 0; j <= line[i][0] - line[i - 1][0]; j++) {
-            grid[line[i][1]][line[i - 1][0] + j] = "#";
+            grid[line[i][1]][line[i - 1][0] + j] = ROCK;
           }
         } else {
           for (let j = 0; j <= line[i - 1][0] - line[i][0]; j++) {
-            grid[line[i][1]][line[i - 1][0] - j] = "#";
+            grid[line[i][1]][line[i - 1][0] - j] = ROCK;
           }
         }
       } else {
         if (line[i][1] - line[i - 1][1] > 0) {
           for (let j = 0; j <= line[i][1] - line[i - 1][1]; j++) {
-            grid[line[i - 1][1] + j][line[i][0]] = "#";
+            grid[line[i - 1][1] + j][line[i][0]] = ROCK;
           }
         } else {
           for (let j = 0; j <= line[i - 1][1] - line[i][1]; j++) {
-            grid[line[i - 1][1] - j][line[i][0]] = "#";
+            grid[line[i - 1][1] - j][line[i][0]] = ROCK;
           }
         }
       }
@@ -83,7 +88,7 @@ const fall = (
   unit: Coordinate,
   status: Status
 ) => {
-  while (unit.r < grid.length && grid[unit.r][unit.c] === ".") {
+  while (unit.r < grid.length && grid[unit.r][unit.c] === AIR) {
     unit.r += 1;
   }
   unit.r -= 1; // undo the last step
@@ -91,43 +96,43 @@ const fall = (
     // if you went too far left, add a column
     if (unit.c === 0) {
       grid.map((row, r) =>
-        r !== grid.length - 1 ? row.splice(0, 0, ".") : row.splice(0, 0, "#")
+        r !== grid.length - 1 ? row.splice(0, 0, AIR) : row.splice(0, 0, ROCK)
       );
       source.c++;
       // if you are the end of the path, fill the space
       if (status.addSand) {
-        grid[grid.length - 2][unit.c] = "o";
+        grid[grid.length - 2][unit.c] = SAND;
         status.addSand = false;
       }
       return;
     }
     // go left first if you can
-    else if (grid[unit.r + 1][unit.c - 1] === ".") {
+    else if (grid[unit.r + 1][unit.c - 1] === AIR) {
       fall(grid, source, { ...unit, r: unit.r + 1, c: unit.c - 1 }, status);
     }
   }
   // if you can't go left check if you can go right
-  if (grid[unit.r + 1][unit.c - 1] !== "." && unit.c + 1 <= grid[0].length) {
+  if (grid[unit.r + 1][unit.c - 1] !== AIR && unit.c + 1 <= grid[0].length) {
     // if you went too far right, add a column
     if (unit.c === grid[0].length - 1) {
       grid.map((row, r) =>
-        r !== grid.length - 1 ? row.push(".") : row.push("#")
+        r !== grid.length - 1 ? row.push(AIR) : row.push(ROCK)
       );
       // if you are the end of the path, fill the space
       if (status.addSand) {
-        grid[grid.length - 2][unit.c + 1] = "o";
+        grid[grid.length - 2][unit.c + 1] = SAND;
         status.addSand = false;
       }
       return;
     }
     // if you can go right, go right
-    else if (grid[unit.r + 1][unit.c + 1] === ".") {
+    else if (grid[unit.r + 1][unit.c + 1] === AIR) {
       fall(grid, source, { ...unit, r: unit.r + 1, c: unit.c + 1 }, status);
     }
   }
   // if you're stuck, fill the space (only if you are at the end of the path)
   if (status.addSand) {
-    grid[unit.r][unit.c] = "o";
+    grid[unit.r][unit.c] = SAND;
     status.addSand = false;
   }
 };
@@ -140,10 +145,10 @@ const solve = (data: string) => {
 
   const status: Status = { addSand: true };
   let count = 0;
-  while (grid[source.r - 1][source.c] !== "o") {
+  while (grid[source.r - 1][source.c] !== SAND) {
     status.addSand = true;
     fall(grid, source, { ...source }, status);
-    if (grid[source.r - 1][source.c] !== "o") {
+    if (grid[source.r - 1][source.c] !== SAND) {
       count += 1;
     }
   }

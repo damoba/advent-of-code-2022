@@ -1,15 +1,15 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
-const markerLength = 4;
+const MARKER_LENGTH = 4;
 
 const solve = (data: string) => {
-  const quartetArr = []; // window holding the last "markerLength" chars
+  const quartetArr = []; // window holding the last "MARKER_LENGTH" chars
   const quartetMap: Map<string, number> = new Map(); // char -> count for window
   let charsAppearingMoreThanOnce = 0; // count of chars appearing more than once in window
 
   let i = 0;
   // initialize window with the last char missing, awaiting uniqueness check
-  while (i < markerLength - 1) {
+  while (i < MARKER_LENGTH - 1) {
     quartetArr.push(data[i]);
     quartetMap.get(data[i])
       ? quartetMap.set(data[i], (quartetMap.get(data[i]) as number) + 1)

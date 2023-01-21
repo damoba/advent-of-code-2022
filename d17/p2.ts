@@ -14,9 +14,12 @@ type LoopStats = {
   nextLoopFirstRock: RockStatus;
 };
 
+const ROCK = "#";
+const AIR = ".";
+
 const ROCKS: Rock[] = [
   {
-    shape: [["#", "#", "#", "#"]],
+    shape: [[ROCK, ROCK, ROCK, ROCK]],
     height: 1,
     width: 4,
     bases: 1,
@@ -24,9 +27,9 @@ const ROCKS: Rock[] = [
   },
   {
     shape: [
-      [".", "#", "."],
-      ["#", "#", "#"],
-      [".", "#", "."],
+      [AIR, ROCK, AIR],
+      [ROCK, ROCK, ROCK],
+      [AIR, ROCK, AIR],
     ],
     height: 3,
     width: 3,
@@ -35,9 +38,9 @@ const ROCKS: Rock[] = [
   },
   {
     shape: [
-      [".", ".", "#"],
-      [".", ".", "#"],
-      ["#", "#", "#"],
+      [AIR, AIR, ROCK],
+      [AIR, AIR, ROCK],
+      [ROCK, ROCK, ROCK],
     ],
     height: 3,
     width: 3,
@@ -45,7 +48,7 @@ const ROCKS: Rock[] = [
     tops: 3,
   },
   {
-    shape: [["#"], ["#"], ["#"], ["#"]],
+    shape: [[ROCK], [ROCK], [ROCK], [ROCK]],
     height: 4,
     width: 1,
     bases: 1,
@@ -53,8 +56,8 @@ const ROCKS: Rock[] = [
   },
   {
     shape: [
-      ["#", "#"],
-      ["#", "#"],
+      [ROCK, ROCK],
+      [ROCK, ROCK],
     ],
     height: 2,
     width: 2,
@@ -76,7 +79,7 @@ const createRockLefts = (rock: Rock, rockHeight: number) => {
     let posCol = 1;
 
     for (let j = 0; j < rock.width; j++) {
-      if (rock.shape[i][j] === "#") {
+      if (rock.shape[i][j] === ROCK) {
         posCol += j + 1;
         break;
       }
@@ -93,7 +96,7 @@ const createRockRights = (rock: Rock, rockHeight: number) => {
     let posCol = 1;
 
     for (let j = rock.width - 1; j >= 0; j--) {
-      if (rock.shape[i][j] === "#") {
+      if (rock.shape[i][j] === ROCK) {
         posCol += j + 1;
         break;
       }
@@ -115,7 +118,7 @@ const createRockBottoms = (
         ? rockLefts[rock.height - 1][1] - 1 + i
         : rockLefts[rock.height - 1][1] + i;
 
-    if (rock.shape[rock.height - rock.bases][i] === "#") {
+    if (rock.shape[rock.height - rock.bases][i] === ROCK) {
       if (rock.bases === 2 && (i === 0 || i === 2)) {
         rockBottoms.push([rockHeight - 1, posCol]);
         continue;
@@ -139,7 +142,7 @@ const createRockTops = (
         : rock.tops === 3
         ? rockLefts[0][1] - 2 + i
         : rockLefts[0][1] + i;
-    if (rock.shape[rock.height - rock.bases][i] === "#") {
+    if (rock.shape[rock.height - rock.bases][i] === ROCK) {
       if (rock.bases === 2 && (i === 0 || i === 2)) {
         rockTops.push([rockHeight - rock.height + 2, posCol]);
         continue;
@@ -156,21 +159,21 @@ const createRockTops = (
 const rockCanGoLeft = (rockLefts: number[][], chamber: string[][]) => {
   return rockLefts.every((rockLeft) => {
     const [row, col] = rockLeft;
-    return col > 0 && chamber[row][col - 1] === ".";
+    return col > 0 && chamber[row][col - 1] === AIR;
   });
 };
 
 const rockCanGoRight = (rockRights: number[][], chamber: string[][]) => {
   return rockRights.every((rockRight) => {
     const [row, col] = rockRight;
-    return col < CHAMBER_WIDTH - 1 && chamber[row][col + 1] === ".";
+    return col < CHAMBER_WIDTH - 1 && chamber[row][col + 1] === AIR;
   });
 };
 
 const rockCanGoDown = (rockBottoms: number[][], chamber: string[][]) => {
   return rockBottoms.every((rockBottom) => {
     const [row, col] = rockBottom;
-    return row < chamber.length - 1 && chamber[row + 1][col] === ".";
+    return row < chamber.length - 1 && chamber[row + 1][col] === AIR;
   });
 };
 
@@ -200,7 +203,7 @@ const solve = (data: string) => {
   let jetIdx = 0;
   const chamber = new Array(CHAMBER_INIT_LEN)
     .fill(0)
-    .map(() => new Array(CHAMBER_WIDTH).fill("."));
+    .map(() => new Array(CHAMBER_WIDTH).fill(AIR));
   let maxHeight = 0;
   let floor = new Array(CHAMBER_WIDTH).fill(chamber.length);
   const rockStats = new Map<string, RockStatus>();
@@ -251,8 +254,8 @@ const solve = (data: string) => {
             : [rockTops[0][0], rockTops[0][1]];
         for (let i = 0; i < rockCurrent.height; i++) {
           for (let j = 0; j < rockCurrent.width; j++) {
-            if (rockCurrent.shape[i][j] === "#") {
-              chamber[i + topLeftCorner[0]][j + topLeftCorner[1]] = "#";
+            if (rockCurrent.shape[i][j] === ROCK) {
+              chamber[i + topLeftCorner[0]][j + topLeftCorner[1]] = ROCK;
             }
           }
         }
@@ -264,7 +267,7 @@ const solve = (data: string) => {
         );
         if (maxHeight > prevMaxHeight) {
           for (let i = 0; i < maxHeight - prevMaxHeight; i++) {
-            chamber.unshift(new Array(CHAMBER_WIDTH).fill("."));
+            chamber.unshift(new Array(CHAMBER_WIDTH).fill(AIR));
             floor = floor.map((f) => f + 1);
             rockLefts = rockLefts.map(([row, col]) => [row + 1, col]);
             rockRights = rockRights.map(([row, col]) => [row + 1, col]);

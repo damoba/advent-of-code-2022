@@ -3,6 +3,11 @@ import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 type Coordinate = { r: number; c: number };
 type Status = { infinity: boolean; addSand: boolean };
 
+const ROCK = "#";
+const AIR = ".";
+const SRC = "+";
+const SAND = "o";
+
 const parseScan = (data: string) => {
   let minC = 500;
   let maxC = 500;
@@ -42,29 +47,29 @@ const parseScan = (data: string) => {
 
   const grid = new Array(maxR - minR + 1)
     .fill(0)
-    .map(() => Array(maxC - minC + 1).fill("."));
+    .map(() => Array(maxC - minC + 1).fill(AIR));
 
-  grid[0][500 - minC] = "+";
+  grid[0][500 - minC] = SRC;
   lines.forEach((line) => {
     for (let i = 1; i < line.length; i++) {
       if (line[i][1] === line[i - 1][1]) {
         if (line[i][0] - line[i - 1][0] > 0) {
           for (let j = 0; j <= line[i][0] - line[i - 1][0]; j++) {
-            grid[line[i][1]][line[i - 1][0] + j] = "#";
+            grid[line[i][1]][line[i - 1][0] + j] = ROCK;
           }
         } else {
           for (let j = 0; j <= line[i - 1][0] - line[i][0]; j++) {
-            grid[line[i][1]][line[i - 1][0] - j] = "#";
+            grid[line[i][1]][line[i - 1][0] - j] = ROCK;
           }
         }
       } else {
         if (line[i][1] - line[i - 1][1] > 0) {
           for (let j = 0; j <= line[i][1] - line[i - 1][1]; j++) {
-            grid[line[i - 1][1] + j][line[i][0]] = "#";
+            grid[line[i - 1][1] + j][line[i][0]] = ROCK;
           }
         } else {
           for (let j = 0; j <= line[i - 1][1] - line[i][1]; j++) {
-            grid[line[i - 1][1] - j][line[i][0]] = "#";
+            grid[line[i - 1][1] - j][line[i][0]] = ROCK;
           }
         }
       }
@@ -75,7 +80,7 @@ const parseScan = (data: string) => {
 };
 
 const fall = (grid: string[][], source: Coordinate, status: Status) => {
-  while (source.r < grid.length && grid[source.r][source.c] === ".") {
+  while (source.r < grid.length && grid[source.r][source.c] === AIR) {
     source.r += 1;
   }
   source.r -= 1; // undo the last step
@@ -93,13 +98,13 @@ const fall = (grid: string[][], source: Coordinate, status: Status) => {
       return;
     }
     // go left first if you can
-    else if (grid[source.r + 1][source.c - 1] === ".") {
+    else if (grid[source.r + 1][source.c - 1] === AIR) {
       fall(grid, { ...source, r: source.r + 1, c: source.c - 1 }, status);
     }
   }
   // if you can't go left, check if you can go right
   if (
-    grid[source.r + 1][source.c - 1] !== "." &&
+    grid[source.r + 1][source.c - 1] !== AIR &&
     source.c + 1 < grid[0].length
   ) {
     // if you went too far right, we got to infinity
@@ -109,13 +114,13 @@ const fall = (grid: string[][], source: Coordinate, status: Status) => {
       return;
     }
     // if you can go right, go right
-    else if (grid[source.r + 1][source.c + 1] === ".") {
+    else if (grid[source.r + 1][source.c + 1] === AIR) {
       fall(grid, { ...source, r: source.r + 1, c: source.c + 1 }, status);
     }
   }
   // if you're stuck, fill the space (only if you are at the end of the path)
   if (status.addSand) {
-    grid[source.r][source.c] = "o";
+    grid[source.r][source.c] = SAND;
     status.addSand = false;
   }
 };

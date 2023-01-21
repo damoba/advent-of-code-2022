@@ -2,7 +2,11 @@ import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 import type { Cube, CubeFace, CubeFaceInfo } from "./cubes.ts";
 import { exampleCube, inputCube } from "./cubes.ts";
 
-const FACINGS = ["Right", "Down", "Left", "Up"] as const;
+const RIGHT = "Right";
+const DOWN = "Down";
+const LEFT = "Left";
+const UP = "Up";
+const FACINGS = [RIGHT, DOWN, LEFT, UP] as const;
 type Facing = typeof FACINGS[number];
 
 const ROTATIONS = { L: -1, R: 1 } as const;
@@ -72,78 +76,78 @@ const teleport = (
   let nextCol = pos.col;
 
   switch (facing.val) {
-    case "Up":
+    case UP:
       switch (nextFacing) {
-        case "Up":
+        case UP:
           nextRow = nextCubeRowEnd;
           nextCol = nextCubeColStart + cubeColOffset;
           break;
-        case "Right":
+        case RIGHT:
           nextRow = nextCubeRowStart + cubeColOffset;
           nextCol = nextCubeColStart;
           break;
-        case "Down":
+        case DOWN:
           nextRow = nextCubeRowStart;
           nextCol = nextCubeColStart + cubeColOffsetFromEnd;
           break;
-        case "Left":
+        case LEFT:
           nextRow = nextCubeRowStart + cubeColOffsetFromEnd;
           nextCol = nextCubeColEnd;
       }
       break;
-    case "Right":
+    case RIGHT:
       switch (nextFacing) {
-        case "Up":
+        case UP:
           nextRow = nextCubeRowEnd;
           nextCol = nextCubeColStart + cubeRowOffset;
           break;
-        case "Right":
+        case RIGHT:
           nextRow = nextCubeRowStart + cubeRowOffset;
           nextCol = nextCubeColStart;
           break;
-        case "Down":
+        case DOWN:
           nextRow = nextCubeRowStart;
           nextCol = nextCubeColStart + cubeRowOffsetFromEnd;
           break;
-        case "Left":
+        case LEFT:
           nextRow = nextCubeRowStart + cubeRowOffsetFromEnd;
           nextCol = nextCubeColEnd;
       }
       break;
-    case "Down":
+    case DOWN:
       switch (nextFacing) {
-        case "Up":
+        case UP:
           nextRow = nextCubeRowEnd;
           nextCol = nextCubeColStart + cubeColOffsetFromEnd;
           break;
-        case "Right":
+        case RIGHT:
           nextRow = nextCubeRowStart + cubeColOffsetFromEnd;
           nextCol = nextCubeColStart;
           break;
-        case "Down":
+        case DOWN:
           nextRow = nextCubeRowStart;
           nextCol = nextCubeColStart + cubeColOffset;
           break;
-        case "Left":
+        case LEFT:
           nextRow = nextCubeRowStart + cubeColOffset;
           nextCol = nextCubeColEnd;
       }
       break;
-    case "Left":
+    case LEFT:
       switch (nextFacing) {
-        case "Up":
+        case UP:
           nextRow = nextCubeRowEnd;
           nextCol = nextCubeColStart + cubeRowOffsetFromEnd;
           break;
-        case "Right":
+        case RIGHT:
           nextRow = nextCubeRowStart + cubeRowOffsetFromEnd;
           nextCol = nextCubeColStart;
           break;
-        case "Down":
+        case DOWN:
           nextRow = nextCubeRowStart;
           nextCol = nextCubeColStart + cubeRowOffset;
           break;
-        case "Left":
+        case LEFT:
           nextRow = nextCubeRowStart + cubeRowOffset;
           nextCol = nextCubeColEnd;
       }
@@ -167,7 +171,7 @@ const move = (
   cube: Cube
 ) => {
   switch (facing.val) {
-    case "Up":
+    case UP:
       if (
         pos.row === 0 ||
         map[pos.row - 1][pos.col] === EDGE ||
@@ -184,7 +188,7 @@ const move = (
         return false;
       }
       break;
-    case "Right":
+    case RIGHT:
       if (
         pos.col === map[pos.row].length - 1 ||
         map[pos.row][pos.col + 1] === EDGE ||
@@ -201,7 +205,7 @@ const move = (
         return false;
       }
       break;
-    case "Down":
+    case DOWN:
       if (
         pos.row === map.length - 1 ||
         map[pos.row + 1][pos.col] === EDGE ||
@@ -218,7 +222,7 @@ const move = (
         return false;
       }
       break;
-    case "Left":
+    case LEFT:
       if (
         pos.col === 0 ||
         map[pos.row][pos.col - 1] === EDGE ||
@@ -271,7 +275,7 @@ const solve = (data: string, cube: Cube) => {
 
   const pos = { row: 0, col: map[0].indexOf(TILE) };
   const cubeFace: { val: CubeFace } = { val: 1 };
-  const facing: { val: Facing } = { val: "Right" };
+  const facing: { val: Facing } = { val: RIGHT };
   traverseMap(map, path, pos, cubeFace, facing, cube);
 
   pos.row++;

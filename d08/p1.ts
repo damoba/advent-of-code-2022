@@ -5,6 +5,11 @@ type Tree = {
   num: number;
 };
 
+const DOWN = "down";
+const UP = "up";
+const RIGHT = "right";
+const LEFT = "left";
+
 const calcVisibleTrees = (
   grid: Tree[][],
   visibleTrees: Tree[],
@@ -29,14 +34,14 @@ const calcVisibleTrees = (
     }
   }
 
-  if (direction === "down") {
-    calcVisibleTrees(grid, visibleTrees, row + 1, col, highestTree, "down");
-  } else if (direction === "up") {
-    calcVisibleTrees(grid, visibleTrees, row - 1, col, highestTree, "up");
-  } else if (direction === "right") {
-    calcVisibleTrees(grid, visibleTrees, row, col + 1, highestTree, "right");
-  } else if (direction === "left") {
-    calcVisibleTrees(grid, visibleTrees, row, col - 1, highestTree, "left");
+  if (direction === DOWN) {
+    calcVisibleTrees(grid, visibleTrees, row + 1, col, highestTree, DOWN);
+  } else if (direction === UP) {
+    calcVisibleTrees(grid, visibleTrees, row - 1, col, highestTree, UP);
+  } else if (direction === RIGHT) {
+    calcVisibleTrees(grid, visibleTrees, row, col + 1, highestTree, RIGHT);
+  } else if (direction === LEFT) {
+    calcVisibleTrees(grid, visibleTrees, row, col - 1, highestTree, LEFT);
   }
 };
 
@@ -60,14 +65,14 @@ const solve = (data: string) => {
     visibleTrees.push(grid[row][COLS - 1]);
   }
   for (let col = 1; col < COLS - 1; col++) {
-    calcVisibleTrees(grid, visibleTrees, 1, col, grid[0][col], "down");
+    calcVisibleTrees(grid, visibleTrees, 1, col, grid[0][col], DOWN);
     calcVisibleTrees(
       grid,
       visibleTrees,
       ROWS - 2,
       col,
       grid[ROWS - 1][col],
-      "up"
+      UP
     );
   }
 
@@ -76,14 +81,14 @@ const solve = (data: string) => {
     visibleTrees.push(grid[ROWS - 1][col]);
   }
   for (let row = 1; row < ROWS - 1; row++) {
-    calcVisibleTrees(grid, visibleTrees, row, 1, grid[row][0], "right");
+    calcVisibleTrees(grid, visibleTrees, row, 1, grid[row][0], RIGHT);
     calcVisibleTrees(
       grid,
       visibleTrees,
       row,
       COLS - 2,
       grid[row][COLS - 1],
-      "left"
+      LEFT
     );
   }
 

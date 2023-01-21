@@ -1,5 +1,10 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
+const DOWN = "down";
+const UP = "up";
+const RIGHT = "right";
+const LEFT = "left";
+
 const calcViewingDistance = (
   grid: number[][],
   row: number,
@@ -16,41 +21,41 @@ const calcViewingDistance = (
   }
 
   countOfShorterTrees.dist++;
-  if (direction === "down") {
+  if (direction === DOWN) {
     calcViewingDistance(
       grid,
       row + 1,
       col,
       originalTree,
       countOfShorterTrees,
-      "down"
+      DOWN
     );
-  } else if (direction === "up") {
+  } else if (direction === UP) {
     calcViewingDistance(
       grid,
       row - 1,
       col,
       originalTree,
       countOfShorterTrees,
-      "up"
+      UP
     );
-  } else if (direction === "right") {
+  } else if (direction === RIGHT) {
     calcViewingDistance(
       grid,
       row,
       col + 1,
       originalTree,
       countOfShorterTrees,
-      "right"
+      RIGHT
     );
-  } else if (direction === "left") {
+  } else if (direction === LEFT) {
     calcViewingDistance(
       grid,
       row,
       col - 1,
       originalTree,
       countOfShorterTrees,
-      "left"
+      LEFT
     );
   }
 };
@@ -81,16 +86,16 @@ const solve = (data: string) => {
         col,
         grid[row][col],
         distanceDown,
-        "down"
+        DOWN
       );
-      calcViewingDistance(grid, row - 1, col, grid[row][col], distanceUp, "up");
+      calcViewingDistance(grid, row - 1, col, grid[row][col], distanceUp, UP);
       calcViewingDistance(
         grid,
         row,
         col + 1,
         grid[row][col],
         distanceRight,
-        "right"
+        RIGHT
       );
       calcViewingDistance(
         grid,
@@ -98,7 +103,7 @@ const solve = (data: string) => {
         col - 1,
         grid[row][col],
         distanceLeft,
-        "left"
+        LEFT
       );
 
       const score =

@@ -4,7 +4,12 @@ type Elf = { r: number; c: number };
 
 const GROUND = ".";
 const ELF = "#";
-const PROPOSAL_ORDER = ["N", "S", "W", "E"];
+
+const NORTH = "N";
+const SOUTH = "S";
+const WEST = "W";
+const EAST = "E";
+const PROPOSAL_ORDER = [NORTH, SOUTH, WEST, EAST];
 type Dir = typeof PROPOSAL_ORDER[number];
 
 const ROUNDS = 10;
@@ -91,13 +96,13 @@ const checkProposal = (map: string[][], elf: string, dir: string) => {
 const getCoorFromDir = (elf: string, dir: Dir) => {
   const { r, c } = JSON.parse(elf) as Elf;
   switch (dir) {
-    case "N":
+    case NORTH:
       return { r: r - 1, c };
-    case "S":
+    case SOUTH:
       return { r: r + 1, c };
-    case "W":
+    case WEST:
       return { r, c: c - 1 };
-    case "E":
+    case EAST:
       return { r, c: c + 1 };
   }
 };

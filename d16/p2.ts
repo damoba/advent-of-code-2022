@@ -18,10 +18,11 @@ type TripStats = {
 };
 
 const TRIP_TIME = 26;
+const START_LABEL = "AA";
 
 const calcDists = (valve: Valve, valves: Valves, valvesWithFreq: Valves) => {
   for (const key in valvesWithFreq) {
-    if (key === "AA" || key === valve.label) {
+    if (key === START_LABEL || key === valve.label) {
       continue;
     }
     const visited: ValveCheck = {};
@@ -77,7 +78,7 @@ const parseValves = (data: string) => {
       neighs,
       neighsInfo: [],
     };
-    if (fRate > 0 || singleValve === "AA") {
+    if (fRate > 0 || singleValve === START_LABEL) {
       valvesWithFreq[singleValve] = {
         ...valves[singleValve],
         neighsInfo: [...valves[singleValve].neighsInfo],
@@ -134,7 +135,7 @@ const calcPressure = (
     });
     if (tripLen === 0) {
       if (isHuman) {
-        const toVisitElephant = [valves["AA"]];
+        const toVisitElephant = [valves[START_LABEL]];
         const statsElephant = [
           {
             ...currStats!,
@@ -163,11 +164,11 @@ const calcPressure = (
 
 const solve = (data: string) => {
   const valves = parseValves(data);
-  const toVisit: Valve[] = [valves["AA"]];
+  const toVisit: Valve[] = [valves[START_LABEL]];
   const stats: TripStats[] = [];
   const visited: ValveCheck = {};
   Object.keys(valves).forEach((key) => {
-    if (key !== "AA") {
+    if (key !== START_LABEL) {
       visited[key] = false;
     }
   });
@@ -177,7 +178,7 @@ const solve = (data: string) => {
     numVisited: 0,
     visited: { ...visited },
   });
-  const maxNumVisit = Math.floor(valves["AA"].neighsInfo.length / 2);
+  const maxNumVisit = Math.floor(valves[START_LABEL].neighsInfo.length / 2);
   return calcPressure(valves, toVisit, stats, maxNumVisit, true);
 };
 
