@@ -1,11 +1,17 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
-const DIRS = ["^", "v", "<", ">"];
+const UP = "^";
+const DOWN = "v";
+const LEFT = "<";
+const RIGHT = ">";
+const DIRS = [UP, DOWN, LEFT, RIGHT];
 const DIRS_SET = new Set(DIRS);
 type Dir = typeof DIRS[number];
 type Stats = { mins: number; posR: number; posC: number };
 
-const DESTS = ["S", "G"];
+const ST = "S";
+const GL = "G";
+const DESTS = [ST, GL];
 type Dest = typeof DESTS[number];
 // to be updated when blizzards are parsed:
 const destsCoor = {
@@ -59,28 +65,28 @@ const moveBlizzard = (
 
   let [r, c] = coor.split(",").map((n) => parseInt(n, 10));
   switch (dir) {
-    case "^":
+    case UP:
       if (r === minRow + 1) {
         r = maxRow - 1;
       } else {
         r--;
       }
       break;
-    case "v":
+    case DOWN:
       if (r === maxRow - 1) {
         r = minRow + 1;
       } else {
         r++;
       }
       break;
-    case "<":
+    case LEFT:
       if (c === minCol + 1) {
         c = maxCol - 1;
       } else {
         c--;
       }
       break;
-    case ">":
+    case RIGHT:
       if (c === maxCol - 1) {
         c = minCol + 1;
       } else {
@@ -125,13 +131,13 @@ const getNeighbours = (
   const neighbours = [];
 
   if (
-    (r > minRow + 1 || (dest === "S" && c === minCol + 1)) &&
+    (r > minRow + 1 || (dest === ST && c === minCol + 1)) &&
     !currBlizzards.has(`${r - 1},${c}`)
   ) {
     neighbours.push({ r: r - 1, c });
   }
   if (
-    (r < maxRow - 1 || (dest === "G" && c === maxCol - 1)) &&
+    (r < maxRow - 1 || (dest === GL && c === maxCol - 1)) &&
     !currBlizzards.has(`${r + 1},${c}`)
   ) {
     neighbours.push({ r: r + 1, c });
@@ -207,9 +213,9 @@ const walkWorld = (
 const solve = (data: string) => {
   const blizzsAtMin = parseBlizzards(data);
   const blizzMovesCache = new Map<string, string>();
-  const minsRound1 = walkWorld(blizzsAtMin, blizzMovesCache, 0, "G");
-  const minsRound2 = walkWorld(blizzsAtMin, blizzMovesCache, minsRound1!, "S");
-  return walkWorld(blizzsAtMin, blizzMovesCache, minsRound2!, "G");
+  const minsRound1 = walkWorld(blizzsAtMin, blizzMovesCache, 0, GL);
+  const minsRound2 = walkWorld(blizzsAtMin, blizzMovesCache, minsRound1!, ST);
+  return walkWorld(blizzsAtMin, blizzMovesCache, minsRound2!, GL);
 };
 
 const example = await Deno.readTextFile("./example.txt");

@@ -1,6 +1,10 @@
 import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
-const DIRS = ["^", "v", "<", ">"];
+const UP = "^";
+const DOWN = "v";
+const LEFT = "<";
+const RIGHT = ">";
+const DIRS = [UP, DOWN, LEFT, RIGHT];
 const DIRS_SET = new Set(DIRS);
 type Dir = typeof DIRS[number];
 type Stats = { mins: number; posR: number; posC: number };
@@ -47,28 +51,28 @@ const moveBlizzard = (
 
   let [r, c] = coor.split(",").map((n) => parseInt(n, 10));
   switch (dir) {
-    case "^":
+    case UP:
       if (r === minRow + 1) {
         r = maxRow - 1;
       } else {
         r--;
       }
       break;
-    case "v":
+    case DOWN:
       if (r === maxRow - 1) {
         r = minRow + 1;
       } else {
         r++;
       }
       break;
-    case "<":
+    case LEFT:
       if (c === minCol + 1) {
         c = maxCol - 1;
       } else {
         c--;
       }
       break;
-    case ">":
+    case RIGHT:
       if (c === maxCol - 1) {
         c = minCol + 1;
       } else {
