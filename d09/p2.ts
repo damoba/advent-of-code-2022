@@ -74,7 +74,7 @@ const solve = (data: string) => {
     str: [0, 0].toString(),
   }));
   const visitedPos = new Set<string>();
-  visitedPos.add(knotsPos[0].str);
+  visitedPos.add(knotsPos[KNOT_COUNT - 1].str);
 
   motions.forEach((motion) => {
     move(visitedPos, knotsPos, motion);
