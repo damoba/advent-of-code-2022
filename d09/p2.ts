@@ -2,20 +2,12 @@ import { assertEquals } from "https://deno.land/std@0.167.0/testing/asserts.ts";
 
 type Knot = { r: number; c: number; str: string };
 
-const MOVE_UP_LEFT = "UL";
-const MOVE_UP = "U";
-const MOVE_UP_RIGHT = "UR";
-const MOVE_LEFT = "L";
-const MOVE_RIGHT = "R";
-const MOVE_DOWN_LEFT = "DL";
-const MOVE_DOWN = "D";
-const MOVE_DOWN_RIGHT = "DR";
+const KNOT_COUNT = 10;
 
-const calcMaxLen = (lines: string[]) => {
-  return lines.reduce((acc, line) => {
-    return Math.max(acc, parseInt(line.split(" ")[1], 10));
-  }, 0);
-};
+const MOVE_RIGHT = "R";
+const MOVE_LEFT = "L";
+const MOVE_UP = "U";
+const MOVE_DOWN = "D";
 
 const parseMotion = (motion: string) => {
   return motion.split(" ").map((x, i) => {
@@ -27,428 +19,65 @@ const parseMotion = (motion: string) => {
   });
 };
 
-const move = (
-  visitedPos: Set<string>,
-  headPos: Knot,
-  tailsPos: Knot[],
-  tailIdx: number,
-  motion: string
-) => {
+const move = (visitedPos: Set<string>, knotsPos: Knot[], motion: string) => {
   const [dir, dist]: [string, number] = parseMotion(motion) as [string, number];
 
-  switch (dir) {
-    case MOVE_UP_LEFT:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.r--;
-        headPos.c--;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            (tailsPos[tailIdx].r === pHeadPos.r &&
-              tailsPos[tailIdx].c > pHeadPos.c) ||
-            (tailsPos[tailIdx].r > pHeadPos.r &&
-              tailsPos[tailIdx].c > pHeadPos.c) ||
-            (tailsPos[tailIdx].r > pHeadPos.r &&
-              tailsPos[tailIdx].c === pHeadPos.c)
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP_LEFT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_LEFT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    case MOVE_UP:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.r--;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP_RIGHT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c === pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP_LEFT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    case MOVE_UP_RIGHT:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.r--;
-        headPos.c++;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            (tailsPos[tailIdx].r === pHeadPos.r &&
-              tailsPos[tailIdx].c < pHeadPos.c) ||
-            (tailsPos[tailIdx].r > pHeadPos.r &&
-              tailsPos[tailIdx].c < pHeadPos.c) ||
-            (tailsPos[tailIdx].r > pHeadPos.r &&
-              tailsPos[tailIdx].c === pHeadPos.c)
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP_RIGHT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_RIGHT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    case MOVE_LEFT:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.c--;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN_LEFT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r === pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_LEFT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP_LEFT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    case MOVE_RIGHT:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.c++;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN_RIGHT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r === pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_RIGHT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_UP_RIGHT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    case MOVE_DOWN_LEFT:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.r++;
-        headPos.c--;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            (tailsPos[tailIdx].r < pHeadPos.r &&
-              tailsPos[tailIdx].c === pHeadPos.c) ||
-            (tailsPos[tailIdx].r < pHeadPos.r &&
-              tailsPos[tailIdx].c > pHeadPos.c) ||
-            (tailsPos[tailIdx].r === pHeadPos.r &&
-              tailsPos[tailIdx].c > pHeadPos.c)
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN_LEFT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_LEFT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    case MOVE_DOWN:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.r++;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN_RIGHT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c === pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN_LEFT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    case MOVE_DOWN_RIGHT:
-      for (let i = 0; i < dist; i++) {
-        const pHeadPos = { ...headPos };
-        headPos.r++;
-        headPos.c++;
-        headPos.str = [headPos.r, headPos.c].toString();
-
-        if (tailIdx < tailsPos.length) {
-          if (
-            (tailsPos[tailIdx].r < pHeadPos.r &&
-              tailsPos[tailIdx].c === pHeadPos.c) ||
-            (tailsPos[tailIdx].r < pHeadPos.r &&
-              tailsPos[tailIdx].c < pHeadPos.c) ||
-            (tailsPos[tailIdx].r === pHeadPos.r &&
-              tailsPos[tailIdx].c < pHeadPos.c)
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN_RIGHT} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r < pHeadPos.r &&
-            tailsPos[tailIdx].c > pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_DOWN} 1`
-            );
-          } else if (
-            tailsPos[tailIdx].r > pHeadPos.r &&
-            tailsPos[tailIdx].c < pHeadPos.c
-          ) {
-            move(
-              visitedPos,
-              tailsPos[tailIdx],
-              tailsPos,
-              tailIdx + 1,
-              `${MOVE_RIGHT} 1`
-            );
-          }
-        } else {
-          visitedPos.add(headPos.str);
-        }
-      }
-      break;
-    default: {
-      break;
+  for (let i = 0; i < dist; i++) {
+    switch (dir) {
+      case MOVE_RIGHT:
+        knotsPos[0].c++;
+        break;
+      case MOVE_LEFT:
+        knotsPos[0].c--;
+        break;
+      case MOVE_UP:
+        knotsPos[0].r--;
+        break;
+      case MOVE_DOWN:
+        knotsPos[0].r++;
+        break;
+      default:
+        break;
     }
+    knotsPos[0].str = [knotsPos[0].r, knotsPos[0].c].toString();
+
+    for (let j = 0; j < KNOT_COUNT - 1; j++) {
+      const knotDistR = knotsPos[j].r - knotsPos[j + 1].r;
+      const knotDistRAbs = Math.abs(knotDistR);
+      const knotDistC = knotsPos[j].c - knotsPos[j + 1].c;
+      const knotDistCAbs = Math.abs(knotDistC);
+
+      if (knotDistRAbs > 1 && knotDistCAbs === 0) {
+        knotDistR < 0 ? knotsPos[j + 1].r-- : knotsPos[j + 1].r++;
+      } else if (knotDistCAbs > 1 && knotDistRAbs === 0) {
+        knotDistC < 0 ? knotsPos[j + 1].c-- : knotsPos[j + 1].c++;
+      } else if (
+        (knotDistRAbs > 1 && knotDistCAbs >= 1) ||
+        (knotDistCAbs > 1 && knotDistRAbs >= 1)
+      ) {
+        knotDistR < 0 ? knotsPos[j + 1].r-- : knotsPos[j + 1].r++;
+        knotDistC < 0 ? knotsPos[j + 1].c-- : knotsPos[j + 1].c++;
+      }
+
+      knotsPos[j + 1].str = [knotsPos[j + 1].r, knotsPos[j + 1].c].toString();
+    }
+
+    visitedPos.add(knotsPos[KNOT_COUNT - 1].str);
   }
 };
 
 const solve = (data: string) => {
   const motions = data.split("\n");
-  const maxLen = calcMaxLen(motions);
-  const headPos: Knot = {
-    r: maxLen,
-    c: maxLen,
-    str: [maxLen, maxLen].toString(),
-  };
-  const tailsPos: Knot[] = new Array(9).fill(0).map(() => ({
-    r: maxLen,
-    c: maxLen,
-    str: [maxLen, maxLen].toString(),
+  const knotsPos: Knot[] = new Array(KNOT_COUNT).fill(0).map(() => ({
+    r: 0,
+    c: 0,
+    str: [0, 0].toString(),
   }));
   const visitedPos = new Set<string>();
-  visitedPos.add(headPos.str);
+  visitedPos.add(knotsPos[0].str);
 
   motions.forEach((motion) => {
-    move(visitedPos, headPos, tailsPos, 0, motion);
+    move(visitedPos, knotsPos, motion);
   });
   return visitedPos.size;
 };
